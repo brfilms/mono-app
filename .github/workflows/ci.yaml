@@ -21,10 +21,13 @@ jobs:
         run: cp .env.example .env
 
       - name: Instalar dependências
+        working-directory: src
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Gerar key do Laravel
+        working-directory: src
         run: php artisan key:generate
 
       - name: Rodar testes unitários
+        working-directory: src
         run: php artisan test --testsuite=Unit
