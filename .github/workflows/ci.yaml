@@ -1,8 +1,9 @@
 name: Continuous Delivery
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+#  pull_request:
+#    branches:
+#      - main
 jobs:
   tests:
     runs-on: ubuntu-latest
