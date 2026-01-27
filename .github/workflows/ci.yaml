@@ -17,6 +17,7 @@ jobs:
           extensions: mbstring, bcmath, pdo, sqlite
           coverage: none
       - name: Copiar .env
+        working-directory: src
         run: cp .env.example .env
 
       - name: Instalar dependências
