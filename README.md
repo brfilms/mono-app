@@ -1,1 +1,3 @@
 # mono-app
+
+setup app
