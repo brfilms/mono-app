@@ -1,0 +1,32 @@
+name: Continuous Delivery
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, pdo, sqlite
+          coverage: none
+      - name: Copiar .env
+        working-directory: src
+        run: cp .env.example .env
+
+      - name: Instalar dependências
+        working-directory: src
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Gerar key do Laravel
+        working-directory: src
+        run: php artisan key:generate
+
+      - name: Rodar testes unitários
+        working-directory: src
+        run: php artisan test --testsuite=Unit
