@@ -12,6 +12,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/operators', function () {
+    $operatorList = Operator::all();
+    return view("operators.dashboard", ["operatorList"=>$operatorList]);
+});
+
 Route::get('/operators/create', function () {
     return view("operators.create_operator");
 })->name('operators.create');
@@ -30,5 +35,6 @@ Route::post('/operators', function(Request $request) {
     $operator->password = $body['password'];
     $operator->save();
 
-    return redirect('/operators/create');
+    return redirect('/operators');
 })->name('operators');
+

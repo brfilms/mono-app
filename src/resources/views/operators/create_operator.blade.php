@@ -42,6 +42,7 @@
         <input type="password" name="password_confirm" id="password_confirm">
         <br>
         <button type="submit">Cadastrar</button>
+        <a href="/operators">Voltar</a>
     </form>
 </body>
 </html>
