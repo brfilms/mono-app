@@ -27,4 +27,6 @@ Route::post('/users', function (Request $request) {
     $customer->birthday = new DateTime($body['birthday']);
 
     $customer->save();
+
+    return redirect()->back()->with('success', 'Usuário cadastrado com sucesso!');
 })->name('users');
