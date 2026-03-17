@@ -2,10 +2,18 @@
 
 namespace App\UseCases;
 Use App\Models\Customer;
+use App\Repository\CustomerRepository;
 use DateTime;
 
 class RegisterCustomerUseCase
 {
+    private CustomerRepository $repository;
+
+    public function __construct(CustomerRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function execute(array $data): Customer
     {
         $customer = new Customer();
@@ -16,7 +24,7 @@ class RegisterCustomerUseCase
         $customer->document = $data['document'];
         $customer->birthday = new DateTime($data['birthday']);
 
-        $customer->save();
+        $this->repository->saveUser($customer);
 
         return $customer;
     }

@@ -8,18 +8,18 @@ class StoreCustomerRequest extends FormRequest
 {
     public function authorize(): bool
 {
-    return true; // Altere para true para permitir o envio
+    return true;
 }
 
 public function rules(): array
 {
     return [
         'name'     => 'required|string|max:255',
-        'email'    => 'required|email|max:255', // Validação de email simples
+        'email'    => 'required|email|max:255',
         'phone'    => 'required',
         'password' => 'required|min:6|confirmed',
-        'document' => 'required|unique:customers,document', // CPF único na tabela 'customers'
-        'birthday' => 'required|date|before:today', // Data deve ser anterior a hoje
+        'document' => 'required|unique:customers,document',
+        'birthday' => 'required|date|before:today',
     ];
 }
 
