@@ -2,20 +2,28 @@
 
 namespace App\UseCases;
 Use App\Models\Customer;
+use App\Repository\Contracts\CustomerRepositoryInterface;
 use App\Repository\CustomerRepository;
 use DateTime;
+use PHPUnit\Framework\Exception;
 
 class RegisterCustomerUseCase
 {
-    private CustomerRepository $repository;
+    private CustomerRepositoryInterface $repository;
 
-    public function __construct(CustomerRepository $repository)
+    public function __construct(CustomerRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    public function execute(array $data): Customer
+    public function execute(array $data): ?Customer
     {
+        if (strlen($data['name']) === 0 ) {
+            return null;
+        }
+        if (strlen($data['email']) === 0  || !(str_contains($data['email'], '@'))) {
+            return null;
+        }
         $customer = new Customer();
         $customer->name = $data['name'];
         $customer->email = $data['email'];
@@ -24,8 +32,10 @@ class RegisterCustomerUseCase
         $customer->document = $data['document'];
         $customer->birthday = new DateTime($data['birthday']);
 
-        $this->repository->saveUser($customer);
-
+        $success = $this->repository->saveUser($customer);
+        if (!$success) {
+            return null;
+        }
         return $customer;
     }
 }

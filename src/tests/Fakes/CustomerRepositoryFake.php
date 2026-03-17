@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Repository;
+namespace Tests\Fakes;
 
 use App\Models\Customer;
 use App\Repository\Contracts\CustomerRepositoryInterface;
 
-class CustomerRepository implements CustomerRepositoryInterface
+class CustomerRepositoryFake implements CustomerRepositoryInterface
 {
+
     public function saveUser(Customer $customer): bool
     {
-        return $customer->save();
+        return true;
     }
 }

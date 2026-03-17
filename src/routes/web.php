@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\CustomerController;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,4 +16,4 @@ Route::get('/users/create', function () {
     return view('users.create-user-form');
 });
 
-Route::post('/users', [UserController::class, 'store'])->name('users');
+Route::post('/users', [CustomerController::class, 'store'])->name('users');
