@@ -21,9 +21,9 @@ class RegisterCustomerUseCase
         if (strlen($data['name']) === 0 ) {
             return null;
         }
-        if (strlen($data['email']) === 0  || !(str_contains($data['email'], '@'))) {
-            return null;
-        }
+//        if (strlen($data['email']) === 0  || !(str_contains($data['email'], '@'))) {
+//            return null;
+//        }
         $customer = new Customer();
         $customer->name = $data['name'];
         $customer->email = $data['email'];
