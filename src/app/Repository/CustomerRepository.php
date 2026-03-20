@@ -12,8 +12,10 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $customer->save();
     }
 
-    public function findByDocument (string $document): ?Customer
+    public function findByDocument(string $document): ?Customer
     {
+        $document = preg_replace('/\D/', '', $document);
+
         return Customer::where('document', $document)->first();
     }
 }

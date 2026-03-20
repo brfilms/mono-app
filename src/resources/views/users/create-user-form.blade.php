@@ -3,103 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BRFILMS - Cadastro de Usuário</title>
+    <title>BRFILMS - {{ isset($customer) ? 'Editar' : 'Cadastrar' }} Espectador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-bg: #141414;
+            --input-bg: #1f1f1f;
+            --primary: #0d6efd;
+            --border: #333;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f0f0f;
+            background-color: var(--bg-dark);
             color: #ffffff;
-            background-image: radial-gradient(circle at top right, #1a1a1a, #0f0f0f);
+            background-image: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #0a0a0a 50%);
             min-height: 100vh;
         }
 
         .navbar {
-            position: relative;
-            z-index: 1050;
-            background-color: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #333;
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
         }
 
         .card-custom {
-            background-color: #212529;
-            border: 1px solid #444;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .card-header {
-            border-bottom: 1px solid #444 !important;
+        .form-label { 
+            color: #aaa; 
+            font-weight: 500; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            margin-bottom: 8px;
         }
 
-        .form-label {
-            color: #e0e0e0;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
+        /* Inputs Modernos Estilo Dark */
         .form-control {
-            background-color: #f8f9fa;
-            border: 2px solid #ced4da;
-            color: #212529;
-            font-weight: 400;
-            border-radius: 8px;
-            transition: all 0.2s;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
-            background-color: #ffffff;
-            border-color: #0d6efd;
-            color: #000000;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.30);
+            background-color: #252525;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
         }
 
-        .form-control::placeholder {
-            color: #6c757d;
-            opacity: 1;
-        }
+        .form-control::placeholder { color: #555; }
 
+        /* Estilo para o seletor de data no dark mode */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0);
+            filter: invert(1);
+            opacity: 0.6;
         }
 
-        .is-invalid {
-            border-color: #dc3545 !important;
-            background-color: #fff8f8 !important;
+        .icon-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #004085);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
         }
 
-        .invalid-feedback {
-            color: #ea868f;
-            font-weight: 500;
+        .btn-primary {
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s;
         }
 
-        .btn-back {
-            color: #adb5bd;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .btn-primary:hover { transform: translateY(-2px); }
 
-        .btn-back:hover {
-            color: #fff;
+        .invalid-feedback { font-size: 0.75rem; }
+
+        /* Estilo Modal */
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top pt-3 pb-3">
-    <div class="container">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container py-2">
         <a class="navbar-brand fw-bold fs-3 text-primary" href="{{ url('/') }}">BR<span class="text-white">FILMS</span></a>
-        
-        <div class="d-flex gap-3 align-items-center ms-auto">
-            <a href="{{ route('customers.index') }}" class="btn btn-primary btn-sm px-4 fw-bold">
-                <i class="bi bi-list-ul me-1"></i> VER LISTAGEM
-            </a>
-            <a href="{{ url('/') }}" class="btn-back small">
-                <i class="bi bi-arrow-left me-1"></i> Voltar
+        <div class="ms-auto">
+            <a href="{{ route('customers.index') }}" class="btn btn-outline-light btn-sm px-4 fw-bold border-secondary">
+                <i class="bi bi-arrow-left me-2"></i>VOLTAR À LISTA
             </a>
         </div>
     </div>
@@ -107,94 +118,84 @@
 
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8 col-xl-7"> 
-            <div class="card card-custom shadow-lg">
-                <div class="card-header bg-transparent p-4 text-center">
-                    <i class="bi bi-person-plus text-primary mb-2" style="font-size: 2.5rem;"></i>
-                    <h2 class="mb-0 fw-bold text-white">Novo Espectador</h2>
-                    <p class="text-secondary small mb-0 mt-2">Crie a conta para acesso à plataforma BRFILMS.</p>
-                </div>
+        <div class="col-md-9 col-lg-7"> 
+            <div class="card card-custom">
                 <div class="card-body p-4 p-md-5">
-                    <form action="{{ route('users') }}" method="post">
+                    
+                    <div class="text-center mb-5">
+                        <div class="icon-badge">
+                            <i class="bi {{ isset($customer) ? 'bi-pencil-square' : 'bi-person-plus' }} text-white fs-3"></i>
+                        </div>
+                        <h2 class="fw-bold text-white">{{ isset($customer) ? 'Editar Cadastro' : 'Novo Espectador' }}</h2>
+                        <p class="text-secondary small">{{ isset($customer) ? 'Mantenha os dados do elenco atualizados.' : 'Preencha os campos para registrar um novo membro.' }}</p>
+                    </div>
+
+                    <form action="{{ isset($customer) ? route('customers.update', $customer->id) : route('customers.store') }}" method="post">
                         @csrf
+                        @if(isset($customer)) @method('PUT') @endif
                         
                         <div class="mb-4">
-                            <label for="name" class="form-label small">NOME COMPLETO</label>
+                            <label for="name" class="form-label">Nome Completo</label>
                             <input type="text" name="name" id="name" 
-                                   class="form-control form-control-lg @error('name') is-invalid @enderror" 
-                                   value="{{ old('name') }}" 
-                                   placeholder="Ex: Diego Dutra">
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                   class="form-control @error('name') is-invalid @enderror" 
+                                   value="{{ old('name', $customer->name ?? '') }}" placeholder="Ex: Diego Dutra">
+                            @error('name') 
+                                <div class="invalid-feedback">{{ $message }}</div> 
                             @enderror
                         </div>
 
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <label for="phone" class="form-label small">TELEFONE</label>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="phone" class="form-label">Telefone</label>
                                 <input type="tel" name="phone" id="phone" 
-                                       class="form-control form-control-lg @error('phone') is-invalid @enderror" 
-                                       value="{{ old('phone') }}"
-                                       placeholder="(00) 00000-0000" maxlength="15">
-                                @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                       class="form-control @error('phone') is-invalid @enderror" 
+                                       value="{{ old('phone', $customer->phone ?? '') }}" placeholder="(00) 00000-0000" maxlength="15">
+                                @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
-                            <div class="col-md-6">
-                                <label for="document" class="form-label small">CPF</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="document" class="form-label">CPF</label>
                                 <input type="text" name="document" id="document" 
-                                       class="form-control form-control-lg @error('document') is-invalid @enderror" 
-                                       value="{{ old('document') }}"
-                                       placeholder="000.000.000-00" maxlength="14">
-                                @error('document')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                       class="form-control @error('document') is-invalid @enderror" 
+                                       value="{{ old('document', $customer->document ?? '') }}" placeholder="000.000.000-00" maxlength="14">
+                                @error('document') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
                         
                         <div class="mb-4">
-                            <label for="email" class="form-label small">E-MAIL PRINCIPAL</label>
+                            <label for="email" class="form-label">E-mail</label>
                             <input type="email" name="email" id="email" 
-                                   class="form-control form-control-lg @error('email') is-invalid @enderror" 
-                                   value="{{ old('email') }}"
-                                   placeholder="seu.email@exemplo.com">
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                   class="form-control @error('email') is-invalid @enderror" 
+                                   value="{{ old('email', $customer->email ?? '') }}" placeholder="exemplo@brfilms.com">
+                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <label for="password" class="form-label small">SENHA (mín. 6 caracteres)</label>
+                        @if(!isset($customer))
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="password" class="form-label">Senha</label>
                                 <input type="password" name="password" id="password" 
-                                       class="form-control form-control-lg @error('password') is-invalid @enderror" 
-                                       placeholder="******">
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                       class="form-control @error('password') is-invalid @enderror" placeholder="******">
+                                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
-
-                            <div class="col-md-6">
-                                <label for="password_confirmation" class="form-label small">CONFIRMAR SENHA</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="password_confirmation" class="form-label">Confirmar Senha</label>
                                 <input type="password" name="password_confirmation" id="password_confirmation" 
-                                       class="form-control form-control-lg" 
-                                       placeholder="******">
+                                       class="form-control" placeholder="******">
                             </div>
                         </div>
+                        @endif
                         
                         <div class="mb-5">
-                            <label for="birthday" class="form-label small">DATA DE NASCIMENTO</label>
+                            <label for="birthday" class="form-label">Data de Nascimento</label>
                             <input type="date" name="birthday" id="birthday" 
-                                   class="form-control form-control-lg @error('birthday') is-invalid @enderror" 
-                                   value="{{ old('birthday') }}">
-                            @error('birthday')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                   class="form-control @error('birthday') is-invalid @enderror" 
+                                   value="{{ old('birthday', isset($customer) ? \Carbon\Carbon::parse($customer->birthday)->format('Y-m-d') : '') }}">
+                            @error('birthday') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">
-                                <i class="bi bi-check-circle me-2"></i>FINALIZAR CADASTRO
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                {{ isset($customer) ? 'ATUALIZAR DADOS' : 'FINALIZAR REGISTRO' }}
                             </button>
                         </div>
                     </form>
@@ -204,15 +205,18 @@
     </div>
 </div>
 
-<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark border-secondary">
+    <div class="modal-content">
       <div class="modal-body text-center p-5">
-        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
-        <h3 class="text-white mt-3 fw-bold">Cadastro Realizado!</h3>
-        <p class="text-secondary mt-2">{{ session('success') }}</p>
-        <div class="d-grid mt-4">
-            <button type="button" class="btn btn-primary btn-lg" data-bs-dismiss="modal">Acessar Plataforma</button>
+        <div class="mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        </div>
+        <h3 class="text-white fw-bold">Perfeito!</h3>
+        <p class="text-secondary">{{ session('success') }}</p>
+        <div class="d-grid gap-2 mt-4">
+            <a href="{{ route('customers.index') }}" class="btn btn-primary fw-bold">Ir para a Listagem</a>
+            <button type="button" class="btn btn-link text-secondary text-decoration-none btn-sm" data-bs-dismiss="modal">Cadastrar outro</button>
         </div>
       </div>
     </div>
@@ -220,29 +224,27 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
+    // Ativa o modal de sucesso se houver a mensagem na sessão
     @if(session('success'))
-        const myModal = new bootstrap.Modal(document.getElementById('successModal'));
-        myModal.show();
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
     @endif
 
+    // Máscaras de Input
     const phoneInput = document.getElementById('phone');
     const documentInput = document.getElementById('document');
 
-    phoneInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-        let formatted = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-        formatted = formatted.replace(/(\d)(\d{4})$/, '$1-$2');
-        e.target.value = formatted;
+    phoneInput.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        v = v.replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2');
+        e.target.value = v;
     });
 
-    documentInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-        let formatted = value.replace(/(\d{3})(\d)/, '$1.$2');
-        formatted = formatted.replace(/(\d{3})(\d)/, '$1.$2');
-        formatted = formatted.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-        e.target.value = formatted;
+    documentInput.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        e.target.value = v;
     });
 </script>
 </body>
