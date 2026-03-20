@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f0f0f; /* Fundo da página continua dark */
+            background-color: #0f0f0f;
             color: #ffffff;
             background-image: radial-gradient(circle at top right, #1a1a1a, #0f0f0f);
             min-height: 100vh;
@@ -25,9 +25,8 @@
             border-bottom: 1px solid #333;
         }
 
-        /* AJUSTE: Card com fundo cinza escuro mais claro para destacar */
         .card-custom {
-            background-color: #212529; /* Bootstrap dark gray */
+            background-color: #212529;
             border: 1px solid #444;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
@@ -37,24 +36,21 @@
             border-bottom: 1px solid #444 !important;
         }
 
-        /* AJUSTE: Labels com cinza muito claro para leitura fácil */
         .form-label {
             color: #e0e0e0;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
 
-        /* AJUSTE CRÍTICO: Inputs com fundo claro e texto escuro para Máxima Visibilidade */
         .form-control {
-            background-color: #f8f9fa; /* Quase branco */
+            background-color: #f8f9fa;
             border: 2px solid #ced4da;
-            color: #212529; /* Texto quase preto */
+            color: #212529;
             font-weight: 400;
             border-radius: 8px;
             transition: all 0.2s;
         }
 
-        /* Ajuste do foco para ser mais agressivo */
         .form-control:focus {
             background-color: #ffffff;
             border-color: #0d6efd;
@@ -62,25 +58,22 @@
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.30);
         }
 
-        /* AJUSTE: Placeholder com cor média para não sumir */
         .form-control::placeholder {
             color: #6c757d;
             opacity: 1;
         }
 
-        /* Ajuste específico para o input de data (calendar icon) */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0); /* Garante que o ícone fique escuro no fundo claro */
+            filter: invert(0);
         }
 
-        /* Ajuste para erros: feedback visual claro */
         .is-invalid {
             border-color: #dc3545 !important;
-            background-color: #fff8f8 !important; /* Fundo levemente rosado no erro */
+            background-color: #fff8f8 !important;
         }
 
         .invalid-feedback {
-            color: #ea868f; /* Rosa claro para ler no fundo dark do card */
+            color: #ea868f;
             font-weight: 500;
         }
 
@@ -100,15 +93,22 @@
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top pt-3 pb-3">
     <div class="container">
         <a class="navbar-brand fw-bold fs-3 text-primary" href="{{ url('/') }}">BR<span class="text-white">FILMS</span></a>
-        <a href="{{ url('/') }}" class="btn-back small">
-            <i class="bi bi-arrow-left me-1"></i> Voltar para Home
-        </a>
+        
+        <div class="d-flex gap-3 align-items-center ms-auto">
+            <a href="{{ route('customers.index') }}" class="btn btn-primary btn-sm px-4 fw-bold">
+                <i class="bi bi-list-ul me-1"></i> VER LISTAGEM
+            </a>
+            <a href="{{ url('/') }}" class="btn-back small">
+                <i class="bi bi-arrow-left me-1"></i> Voltar
+            </a>
+        </div>
     </div>
 </nav>
 
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8 col-xl-7"> <div class="card card-custom shadow-lg">
+        <div class="col-md-10 col-lg-8 col-xl-7"> 
+            <div class="card card-custom shadow-lg">
                 <div class="card-header bg-transparent p-4 text-center">
                     <i class="bi bi-person-plus text-primary mb-2" style="font-size: 2.5rem;"></i>
                     <h2 class="mb-0 fw-bold text-white">Novo Espectador</h2>

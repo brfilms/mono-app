@@ -17,3 +17,4 @@ Route::get('/users/create', function () {
 });
 
 Route::post('/users', [CustomerController::class, 'store'])->name('users');
+Route::get('/clientes', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers.index');

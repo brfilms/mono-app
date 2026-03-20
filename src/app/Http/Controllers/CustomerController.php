@@ -19,7 +19,6 @@ class CustomerController
             $registerUseCase->execute($request->all());
 
             return redirect()->back()->with('success', 'Usuário cadastrado com sucesso!');
-
         } catch (InvalidArgumentException $e) {
             $message = $e->getMessage();
             $key = 'error';
@@ -32,7 +31,6 @@ class CustomerController
             elseif (str_contains($message, 'nascimento')) $key = 'birthday';
 
             return redirect()->back()->withErrors([$key => $message])->withInput();
-
         } catch (\Exception $e) {
             Log::error("Erro no cadastro de cliente: " . $e->getMessage());
 
@@ -40,5 +38,12 @@ class CustomerController
                 ->withErrors(['error' => 'Ocorreu um erro inesperado. Por favor, tente novamente.'])
                 ->withInput();
         }
+
+    }
+    public function index()
+    {
+        $customers = \App\Models\Customer::orderBy('id', 'desc')->get();
+
+        return view('customers.index', compact('customers'));
     }
 }
