@@ -146,9 +146,9 @@
                             Administração interna e níveis de permissão.
                         </p>
                         <div class="d-grid">
-                            <button class="btn btn-dark btn-portal text-secondary border-secondary" disabled>
-                                <i class="bi bi-lock-fill me-2"></i>EM BREVE
-                            </button>
+                            <a href="{{ route('operators.index') }}" class="btn btn-primary btn-portal">
+                                ACESSAR MÓDULO
+                            </a>
                         </div>
                     </div>
                 </div>

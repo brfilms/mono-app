@@ -13,15 +13,11 @@ Route::get('/users/create', function () {
 });
 
 Route::post('/clientes', [CustomerController::class, 'store'])->name('customers.store');
-
 Route::get('/clientes', [CustomerController::class, 'index'])->name('customers.index');
-
 Route::get('/clientes/{id}/editar', [CustomerController::class, 'edit'])->name('customers.edit');
-
 Route::put('/clientes/{id}', [CustomerController::class, 'update'])->name('customers.update');
-
 Route::delete('/clientes/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
-Route::get('/operators', [OperatorController::class, "index"]);
+Route::get('/operators', [OperatorController::class, "index"])->name('operators.index');
 Route::get('/operators/create', [OperatorController::class, "create"])->name('operators.create');
 Route::post('/operators', [OperatorController::class, "store"])->name('operators');
