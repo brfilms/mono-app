@@ -1,0 +1,92 @@
+:root {
+    --bg-dark: #0a0a0a;
+    --card-bg: #141414;
+    --input-bg: #1f1f1f;
+    --primary: #0d6efd;
+    --border: #333;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: #ffffff;
+    background-image: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #0a0a0a 50%);
+    min-height: 100vh;
+}
+
+.navbar {
+    background-color: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border);
+}
+
+.card-custom {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.form-label { 
+    color: #aaa; 
+    font-weight: 500; 
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+/* Inputs Modernos Estilo Dark */
+.form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border);
+    color: #fff !important;
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: #252525;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+.form-control::placeholder { color: #555; }
+
+/* Estilo para o seletor de data no dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+}
+
+.icon-badge {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary), #004085);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
+}
+
+.btn-primary {
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s;
+}
+
+.btn-primary:hover { transform: translateY(-2px); }
+
+.invalid-feedback { font-size: 0.75rem; }
+
+/* Estilo Modal */
+.modal-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+}
