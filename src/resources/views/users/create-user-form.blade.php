@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BRFILMS - {{ isset($customer) ? 'Editar' : 'Cadastrar' }} Espectador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-bg: #141414;
+            --input-bg: #1f1f1f;
+            --primary: #0d6efd;
+            --border: #333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            background-image: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #0a0a0a 50%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-custom {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .form-label { 
+            color: #aaa; 
+            font-weight: 500; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        /* Inputs Modernos Estilo Dark */
+        .form-control {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: #252525;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+        }
+
+        .form-control::placeholder { color: #555; }
+
+        /* Estilo para o seletor de data no dark mode */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.6;
+        }
+
+        .icon-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #004085);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-primary {
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        .invalid-feedback { font-size: 0.75rem; }
+
+        /* Estilo Modal */
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container py-2">
+        <a class="navbar-brand fw-bold fs-3 text-primary" href="{{ url('/') }}">BR<span class="text-white">FILMS</span></a>
+        <div class="ms-auto">
+            <a href="{{ route('customers.index') }}" class="btn btn-outline-light btn-sm px-4 fw-bold border-secondary">
+                <i class="bi bi-arrow-left me-2"></i>VOLTAR À LISTA
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-7"> 
+            <div class="card card-custom">
+                <div class="card-body p-4 p-md-5">
+                    
+                    <div class="text-center mb-5">
+                        <div class="icon-badge">
+                            <i class="bi {{ isset($customer) ? 'bi-pencil-square' : 'bi-person-plus' }} text-white fs-3"></i>
+                        </div>
+                        <h2 class="fw-bold text-white">{{ isset($customer) ? 'Editar Cadastro' : 'Novo Espectador' }}</h2>
+                        <p class="text-secondary small">{{ isset($customer) ? 'Mantenha os dados do elenco atualizados.' : 'Preencha os campos para registrar um novo membro.' }}</p>
+                    </div>
+
+                    <form action="{{ isset($customer) ? route('customers.update', $customer->id) : route('customers.store') }}" method="post">
+                        @csrf
+                        @if(isset($customer)) @method('PUT') @endif
+                        
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Nome Completo</label>
+                            <input type="text" name="name" id="name" 
+                                   class="form-control @error('name') is-invalid @enderror" 
+                                   value="{{ old('name', $customer->name ?? '') }}" placeholder="Ex: Diego Dutra">
+                            @error('name') 
+                                <div class="invalid-feedback">{{ $message }}</div> 
+                            @enderror
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="phone" class="form-label">Telefone</label>
+                                <input type="tel" name="phone" id="phone" 
+                                       class="form-control @error('phone') is-invalid @enderror" 
+                                       value="{{ old('phone', $customer->phone ?? '') }}" placeholder="(00) 00000-0000" maxlength="15">
+                                @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="document" class="form-label">CPF</label>
+                                <input type="text" name="document" id="document" 
+                                       class="form-control @error('document') is-invalid @enderror" 
+                                       value="{{ old('document', $customer->document ?? '') }}" placeholder="000.000.000-00" maxlength="14">
+                                @error('document') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" name="email" id="email" 
+                                   class="form-control @error('email') is-invalid @enderror" 
+                                   value="{{ old('email', $customer->email ?? '') }}" placeholder="exemplo@brfilms.com">
+                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        
+                        @if(!isset($customer))
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="password" class="form-label">Senha</label>
+                                <input type="password" name="password" id="password" 
+                                       class="form-control @error('password') is-invalid @enderror" placeholder="******">
+                                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="password_confirmation" class="form-label">Confirmar Senha</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" 
+                                       class="form-control" placeholder="******">
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <div class="mb-5">
+                            <label for="birthday" class="form-label">Data de Nascimento</label>
+                            <input type="date" name="birthday" id="birthday" 
+                                   class="form-control @error('birthday') is-invalid @enderror" 
+                                   value="{{ old('birthday', isset($customer) ? \Carbon\Carbon::parse($customer->birthday)->format('Y-m-d') : '') }}">
+                            @error('birthday') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                {{ isset($customer) ? 'ATUALIZAR DADOS' : 'FINALIZAR REGISTRO' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-5">
+        <div class="mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        </div>
+        <h3 class="text-white fw-bold">Perfeito!</h3>
+        <p class="text-secondary">{{ session('success') }}</p>
+        <div class="d-grid gap-2 mt-4">
+            <a href="{{ route('customers.index') }}" class="btn btn-primary fw-bold">Ir para a Listagem</a>
+            <button type="button" class="btn btn-link text-secondary text-decoration-none btn-sm" data-bs-dismiss="modal">Cadastrar outro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Ativa o modal de sucesso se houver a mensagem na sessão
+    @if(session('success'))
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    @endif
+
+    // Máscaras de Input
+    const phoneInput = document.getElementById('phone');
+    const documentInput = document.getElementById('document');
+
+    phoneInput.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        v = v.replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2');
+        e.target.value = v;
+    });
+
+    documentInput.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        e.target.value = v;
+    });
+</script>
+</body>
+</html>
