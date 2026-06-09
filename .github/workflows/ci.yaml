@@ -1,8 +1,8 @@
-name: Continuous Delivery
+name: Continuous Integration
 on:
   pull_request:
     branches:
-      - main
+      - dev
 jobs:
   tests:
     runs-on: ubuntu-latest
