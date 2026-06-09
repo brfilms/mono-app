@@ -8,4 +8,5 @@ interface CustomerRepositoryInterface
 {
     public function saveUser(Customer $customer): bool;
     public function findByDocument(string $document): ?Customer;
+    public function findById(int $id): ?Customer;
 }
