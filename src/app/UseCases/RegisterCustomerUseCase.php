@@ -4,6 +4,9 @@ namespace App\UseCases;
 
 use App\Models\Customer;
 use App\Repository\Contracts\CustomerRepositoryInterface;
+use App\Mail\CustomerEmailVerification; // ADICIONADO: Nossa classe de e-mail
+use Illuminate\Support\Facades\Mail; // ADICIONADO: Facade para disparar e-mails
+use Illuminate\Support\Facades\URL; // ADICIONADO: Facade para criar links seguros
 use DateTime;
 use Exception;
 use InvalidArgumentException;
@@ -39,7 +42,6 @@ class RegisterCustomerUseCase
             throw new InvalidArgumentException('Por favor, insira um endereço de e-mail válido.');
         }
 
-
         if (empty($data['password']) || strlen($data['password']) < 6) {
             throw new InvalidArgumentException('A senha é obrigatória e deve ter no mínimo 6 caracteres.');
         }
@@ -70,7 +72,6 @@ class RegisterCustomerUseCase
         $customer->phone = $data['phone'];
         $customer->password = bcrypt($data['password']);
         $customer->document = $data['document'];
-        
         $customer->birthday = $birthday->format('Y-m-d'); 
 
         $success = $this->repository->saveUser($customer);
@@ -78,6 +79,14 @@ class RegisterCustomerUseCase
         if (!$success) {
             throw new Exception('Ocorreu um erro interno ao salvar o cliente no banco.');
         }
+
+        $verifyUrl = URL::temporarySignedRoute(
+            'customers.verify_email', 
+            now()->addHours(24),      
+            ['id' => $customer->id]
+        );
+
+        Mail::to($customer->email)->send(new CustomerEmailVerification($customer, $verifyUrl));
 
         return $customer;
     }

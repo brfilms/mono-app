@@ -9,7 +9,11 @@ class Customer extends Model
 {
     protected $table = "customers";
     public $timestamps = false;
-    protected $fillable = ['name', 'phone', 'email', 'password', 'birthday', 'document'];
+    protected $fillable = ['name', 'phone', 'email', 'password', 'birthday', 'document', 'email_verified_at'];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
     protected function document(): Attribute
     {
