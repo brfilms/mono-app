@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use App\Models\Customer;
 use App\UseCases\RegisterCustomerUseCase;
 use App\Repository\Contracts\CustomerRepositoryInterface;
+use App\Mail\CustomerEmailVerification;
+use Illuminate\Support\Facades\Mail;
 use InvalidArgumentException;
 use Tests\TestCase;
 
@@ -15,19 +17,25 @@ class CustomerUseCaseTest extends TestCase
         return [
             'name'                  => 'Diego Martins',
             'email'                 => 'diego@email.com',
-            'phone'                 => '(61) 98336-2270', // Com máscara
+            'phone'                 => '(61) 98336-2270',
             'password'              => '123456',
             'password_confirmation' => '123456',
-            'document'              => '074.512.621-97', // Com máscara
+            'document'              => '074.512.621-97',
             'birthday'              => '1990-01-01',
         ];
     }
 
     public function test_create_customer_successfully_and_formats_attributes()
     {
+        Mail::fake();
+
         $repositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $repositoryMock->method('findByDocument')->willReturn(null);
-        $repositoryMock->method('saveUser')->willReturn(true);
+        
+        $repositoryMock->method('saveUser')->willReturnCallback(function (Customer $customer) {
+            $customer->id = 1;
+            return true;
+        });
 
         $useCase = new RegisterCustomerUseCase($repositoryMock);
 
@@ -39,6 +47,10 @@ class CustomerUseCaseTest extends TestCase
         $this->assertEquals("(61) 98336-2270", $customer->phone);
         
         $this->assertTrue(strlen($customer->password) >= 60);
+
+        Mail::assertSent(CustomerEmailVerification::class, function ($mail) use ($customer) {
+            return $mail->hasTo($customer->email);
+        });
     }
 
     public function test_throws_exception_if_name_is_empty()
